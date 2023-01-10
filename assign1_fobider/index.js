@@ -16,10 +16,15 @@ client.on('ready', () => {
   
   // 메세지에 대한 이벤트 리스너를 생성합니다.
   client.on(Events.MessageCreate, (message) => {
-    // 메세지가 만약 "핑" 이라면,
-    if (message.content === '핑') {
-      // 채널에 "퐁"을 전송
-      message.channel.send('퐁');
+    const re = /부(.*)호(.*)호/;
+    if (message.member.user.bot) return;
+
+    // 메세지가 만약 "부호호" 라면,
+    if (re.test(message.content)) {
+      // 메세지를 보낸 사람을 언급 한뒤 채널에 "부호호 금지."를 전송
+      const user = message.author;
+      message.delete();
+      return message.channel.send(`<@${user.id}> 부호호 금지령.`);
     }
   });
 
